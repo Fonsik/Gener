@@ -29,20 +29,24 @@ for x in range (n):
 		t.Branch(ss[28*x+y],vecttab[28*x+y], ss[28*x+y]+"/I")
 t.Fill()
 
-for i in range (5):
-	a=random.uniform(-1,1)
+for i in range (20):
+	a=random.uniform(-3,3)
 	b=random.uniform(0,28)
+	ctr=0
+	Matrix = [[0 for x in range(n)] for y in range(m)] 
 	for x in range (n):
-		y=a*(x-28)+b
+		y=(n-b-x)/a
 		y=int(y)
 		if (y<m and y>=0):
 			Matrix[x][y]="*"
-	for x in range (n):
-		print Matrix[x]
-	print "--------------"
-	print a, b
-	print "--------------"
-
+			ctr+=1
+	if ctr>5:
+		for x in range (n):
+			print Matrix[x]
+		print "-----------------"
+	else:
+		i-=1
+		
 	'''for x in range (28):
 		for y in range (28):
 			vecttab[28*x+y][0]=Matrix[x][y]
