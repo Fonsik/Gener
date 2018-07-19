@@ -50,14 +50,51 @@ model.add(Dense(2, activation='softmax'))
 model.compile(loss='categorical_crossentropy',
               optimizer=SGD(lr=0.01), metrics=['accuracy', ])
 
+
+output2 = TFile.Open('TMVA2.root', 'RECREATE')
+factory2 = TMVA.Factory('TMVARegression', output,
+        '!V:!Silent:Color:DrawProgressBar:Transformations=I,I:AnalysisType=Regression')
+'''
+dat = TFile.Open('data.root')
+tree = data.Get('dat')
+
+dataloader = TMVA.DataLoader('dataset')
+for branch in tree.GetListOfBranches():
+    name = branch.GetName()
+    if name != 'fvalue':
+        dataloader.AddVariable(name)
+dataloader.AddTarget('fvalue')
+
+dataloader.AddRegressionTree(tree, 1.0)
+dataloader.PrepareTrainingAndTestTree(TCut(''),
+        'SplitMode=Random:NormMode=NumEvents:!V')
+
+# Generate model
+
+# Define model
+model2 = Sequential()
+model2.add(Dense(786, activation='tanh', W_regularizer=l2(1e-5), input_dim=784))
+model2.add(Dense(786, activation='tanh', W_regularizer=l2(1e-5), input_dim=784))
+model2.add(Dense(786, activation='tanh', W_regularizer=l2(1e-5), input_dim=784))
+model2.add(Dense(2, activation='linear'))
+
+# Set loss and optimizer
+model2.compile(loss='mean_squared_error', optimizer=SGD(lr=0.01))
+
 # Store model to file
 model.save('model.h5')
 model.summary()
+model2.save('model2.h5')
+model2.summary()
 
-# Book methods
 factory.BookMethod(dataloader, TMVA.Types.kPyKeras, 'PyKeras',
                    'H:!V:VarTransform=I,I:FilenameModel=model.h5:NumEpochs=50:BatchSize=32')
 
+
+factory2.BookMethod(dataloader, TMVA.Types.kPyKeras, 'PyKeras2',
+        'H:!V:VarTransform=I,I:FilenameModel=model2.h5:NumEpochs=50:BatchSize=32')
+
+'''
 # Run training, test and evaluation
 factory.TrainAllMethods()
 factory.TestAllMethods()
