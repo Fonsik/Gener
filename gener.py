@@ -11,7 +11,7 @@ random.seed()
 
 m=28
 n=28
-nump=100000
+nump=10000
 
 Matrix = [[0 for x in range(n)] for y in range(m)] 
 
@@ -26,6 +26,11 @@ for x in range(n):
 		vecttab.append(array.array('i', [0]))
 		ss.append("a"+str(x)+str(y))
 		t.Branch(ss[n*x+y],vecttab[-1], ss[n*x+y]+"/I")
+
+a=array.array('f', [0])
+b=array.array('f', [0])
+t.Branch("a",a, "a/F" )
+t.Branch("b",b, "b/F" )
 
 i=0
 while (i<nump):
@@ -49,7 +54,7 @@ while (i<nump):
 		i-=1
 
 	if (i%1000 == 0):
-		print "--- ... Processing event: ", i+1, "  ", round(100.0*((i+1)/float(2*nump)),2), "%" 
+		print "--- ... Processing event: ", i, "  ", round(100.0*((i+1)/float(2*nump)),2), "%" 
 
 fout.Write()
 fout.Close()
@@ -63,12 +68,14 @@ ss=[]
 for x in range(n):
 	for y in range (m):
 		vecttab.append(array.array('i', [0]))
-		ss.append("b"+str(x)+str(y))
+		ss.append("a"+str(x)+str(y))
 		ns.Branch(ss[n*x+y],vecttab[-1], ss[n*x+y]+"/I")
 
 for i in range (nump):
 	Matrix = [[0 for x in range(n)] for y in range(m)] 
-	for j in range (25):
+	r=random.uniform(0,50)
+	r=int(r)
+	for j in range (r):
 		x=random.uniform(0,28)
 		y=random.uniform(0,28)
 		x=int(x)
@@ -79,7 +86,7 @@ for i in range (nump):
 			vecttab[n*x+y][0]=Matrix[x][y]	
 	ns.Fill()
 	if (i%1000 == 0):
-		print "--- ... Processing event: ", nump+i+1, "  ", round(100.0*((nump+i+1)/float(2*nump)),2), "%" 
+		print "--- ... Processing event: ", nump+i, "  ", round(100.0*((nump+i+1)/float(2*nump)),2), "%" 
 
 
 noise.Write()
