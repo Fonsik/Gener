@@ -1,36 +1,16 @@
 import random
-import idx2numpy
-import ROOT
-from ROOT import TMVA, TFile, TString, TTree, TLorentzVector, TChain
-from array import array
-from subprocess import call
-from os.path import isfile
-from ROOT import std
-import array
+import h5py
+import numpy as np
+import pickle 
 random.seed()
 
 m=28
 n=28
-nump=20000
+nump=2000
 
-Matrix = [[0 for x in range(n)] for y in range(m)] 
-
-
-fout = ROOT.TFile("track.root","RECREATE")
-t = TTree( 'trk', 'trk' )
-vecttab=[]
-ss=[]
-
-for x in range(n):
-	for y in range (m):
-		vecttab.append(array.array('i', [0]))
-		ss.append("a"+str(x)+str(y))
-		t.Branch(ss[n*x+y],vecttab[-1], ss[n*x+y]+"/I")
-
-aa=array.array('f', [0])
-bb=array.array('f', [0])
-t.Branch("a",aa, "a/F" )
-t.Branch("b",bb, "b/F" )
+Vector=np.zeros((n*m),dtype=bool)
+np.set_printoptions(linewidth=85)
+Matrix=np.zeros((nump))
 
 i=0
 while (i<nump):
@@ -38,30 +18,24 @@ while (i<nump):
 	b=random.uniform(0,28)
 	i+=1
 	ctr=0
-	Matrix = [[0 for x in range(n)] for y in range(m)] 
+	Vector=np.zeros((n*m),dtype=bool)
 	for x in range (n):
 		y=a*x+b
 		y=int(y)
 		y=m-1-y
 		if (y<m and y>=0):
-			Matrix[y][x]=1
+			Vector[m*y+x]=1
 			ctr+=1
-	if ctr>5:
-		for x in range (n):
-			for y in range (m):
-				vecttab[n*x+y][0]=Matrix[x][y]
-				aa[0]=a
-				bb[0]=b
-		t.Fill()
-	else:
+	if ctr<5:
 		i-=1
+	else:
+		with h5py.File('tracks.h5', 'w') as f:
+			f.create_dataset("tracks",  data=Vector)
 
-	if (i%1000 == 0):
-		print "--- ... Processing event: ", i, "  ", round(100.0*((i+1)/float(3*nump)),2), "%" 
+f.close()
 
-fout.Write()
-fout.Close()
 
+'''
 noise = ROOT.TFile("noise.root","RECREATE")
 ns = TTree( 'nis', 'nis' )
 
@@ -123,11 +97,10 @@ while (i<nump):
 	r=random.uniform(0,50)
 	r=int(r)
 	for x in range (n):
-		y=a*x+b
+		y=(n-b-x)/a
 		y=int(y)
-		y=m-1-y
 		if (y<m and y>=0):
-			Matrix[y][x]=1
+			Matrix1[x][y]=1
 			ctr+=1
 	for j in range (r):
 		x=random.uniform(0,28)
@@ -151,3 +124,4 @@ while (i<nump):
 
 data.Write()
 data.Close()
+'''

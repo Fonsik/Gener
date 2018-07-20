@@ -19,7 +19,7 @@ TMVA.PyMethodBase.PyInitialize()
 
 output = TFile.Open('TMVA.root', 'RECREATE')
 factory = TMVA.Factory('TMVAClassification', output,
-                       '!V:!Silent:Color:DrawProgressBar:Transformations=I,G:AnalysisType=Classification')
+                       '!V:!Silent:Color:DrawProgressBar:Transformations=I,I:AnalysisType=Classification')
 
 
 dim=28*28
@@ -63,7 +63,7 @@ model.summary()
 
 output2 = TFile.Open('TMVA2.root', 'RECREATE')
 factory2 = TMVA.Factory('TMVARegression', output2,
-        '!V:!Silent:Color:DrawProgressBar:Transformations=I,G:AnalysisType=Regression')
+        '!V:!Silent:Color:DrawProgressBar:Transformations=I,I:AnalysisType=Regression')
 
 dataloader2 = TMVA.DataLoader('dataset')
 
@@ -97,11 +97,11 @@ model2.save('model2.h5')
 model2.summary()
 
 factory.BookMethod(dataloader, TMVA.Types.kPyKeras, 'PyKeras',
-                   'H:!V:VarTransform=I,G:FilenameModel=model.h5:NumEpochs=50:BatchSize=32')
+                   'H:!V:VarTransform=I,I:FilenameModel=model.h5:NumEpochs=50:BatchSize=32')
 
 
 factory2.BookMethod(dataloader2, TMVA.Types.kPyKeras, 'PyKeras2',
-        'H:!V:VarTransform=I,G:FilenameModel=model2.h5:NumEpochs=50:BatchSize=32')
+        'H:!V:VarTransform=I,I:FilenameModel=model2.h5:NumEpochs=50:BatchSize=32')
 
 
 # Run training, test and evaluation
