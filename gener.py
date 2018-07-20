@@ -11,13 +11,12 @@ random.seed()
 
 m=28
 n=28
-nump=10000
+nump=20000
 
 Matrix = [[0 for x in range(n)] for y in range(m)] 
 
 fout = ROOT.TFile("track.root","RECREATE")
 t = TTree( 'trk', 'trk' )
-t2=TTree('param','param')
 vecttab=[]
 ss=[]
 
@@ -29,8 +28,8 @@ for x in range(n):
 
 aa=array.array('f', [0])
 bb=array.array('f', [0])
-t2.Branch("a",aa, "a/F" )
-t2.Branch("b",bb, "b/F" )
+t.Branch("a",aa, "a/F" )
+t.Branch("b",bb, "b/F" )
 
 i=0
 while (i<nump):
@@ -40,10 +39,11 @@ while (i<nump):
 	ctr=0
 	Matrix = [[0 for x in range(n)] for y in range(m)] 
 	for x in range (n):
-		y=(n-b-x)/a
+		y=a*x+b
 		y=int(y)
+		y=m-1-y
 		if (y<m and y>=0):
-			Matrix[x][y]=1
+			Matrix[y][x]=1
 			ctr+=1
 	if ctr>5:
 		for x in range (n):
@@ -52,7 +52,6 @@ while (i<nump):
 				aa[0]=a
 				bb[0]=b
 		t.Fill()
-		t2.Fill()
 	else:
 		i-=1
 
