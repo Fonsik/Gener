@@ -17,47 +17,48 @@ Matrix = [[0 for x in range(n)] for y in range(m)]
 
 
 fout = ROOT.TFile("track.root","RECREATE")
-t = TTree( 'trk', 'trk' )
-vecttab=[]
-ss=[]
 
-for x in range(n):
-	for y in range (m):
-		vecttab.append(array.array('i', [0]))
-		ss.append("a"+str(x)+str(y))
-		t.Branch(ss[n*x+y],vecttab[-1], ss[n*x+y]+"/I")
-
-aa=array.array('f', [0])
-bb=array.array('f', [0])
-t.Branch("a",aa, "a/F" )
-t.Branch("b",bb, "b/F" )
-
-i=0
-while (i<nump):
-	a=random.uniform(-3,3)
-	b=random.uniform(0,28)
-	i+=1
-	ctr=0
-	Matrix = [[0 for x in range(n)] for y in range(m)] 
-	for x in range (n):
-		y=a*x+b
-		y=int(y)
-		y=m-1-y
-		if (y<m and y>=0):
-			Matrix[y][x]=1
-			ctr+=1
-	if ctr>5:
-		for x in range (n):
+for xp in range(n):
+	for yp in range(m):
+		t = TTree( 'trk'+str(xp)+str(yp), 'trk' )
+		vecttab=[]
+		ss=[]
+		for x in range(n):
 			for y in range (m):
-				vecttab[n*x+y][0]=Matrix[x][y]
-				aa[0]=a
-				bb[0]=b
-		t.Fill()
-	else:
-		i-=1
+				vecttab.append(array.array('i', [0]))
+				ss.append("a"+str(x)+str(y))
+				t.Branch(ss[n*x+y],vecttab[-1], ss[n*x+y]+"/I")
+				aa=array.array('f', [0])
+				bb=array.array('f', [0])
+				t.Branch("a",aa, "a/F" )
+				t.Branch("b",bb, "b/F" )
 
-	if (i%1000 == 0):
-		print "--- ... Processing event: ", i, "  ", round(100.0*((i+1)/float(3*nump)),2), "%" 
+				i=0
+				while (i<nump):
+					a=random.uniform(-3,3)
+					b=random.uniform(0,28)
+					i+=1
+					ctr=0
+					Matrix = [[0 for x in range(n)] for y in range(m)] 
+					for x in range (n):
+						y=a*x+b
+						y=int(y)
+						y=m-1-y
+						if (y<m and y>=0):
+							Matrix[y][x]=1
+							ctr+=1
+					if ctr>5:
+						for x in range (n):
+							for y in range (m):
+								vecttab[n*x+y][0]=Matrix[x][y]
+								aa[0]=a
+								bb[0]=b
+						t.Fill()
+					else:
+						i-=1
+
+					if (i%1000 == 0):
+						print "--- ... Processing event: ", i, "  ", round(100.0*((i+1)/float(3*nump)),2), "%" 
 
 fout.Write()
 fout.Close()
