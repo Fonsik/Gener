@@ -11,17 +11,17 @@ import numpy as np
 config = tf.ConfigProto( device_count = {'GPU': 1 , 'CPU': 4} ) 
 sess = tf.Session(config=config) 
 keras.backend.set_session(sess)
-# Instantiating HDF5Matrix for the training set, which is a slice of the first 150 elements
+
 n=28
 m=28
 nump=50000
+'''
 
+x_train = HDF5Matrix('Selection.h5', 'Data', start=0, end=nump)
+y_train = HDF5Matrix('Selection.h5', 'ID', start=0, end=nump)
 
-x_train = HDF5Matrix('Selection.h5', 'Data', start=0, end=nump/2)
-y_train = HDF5Matrix('Selection.h5', 'ID', start=0, end=nump/2)
-
-x_test = HDF5Matrix('Selection.h5', 'Data', start=nump/2, end=nump)
-y_test = HDF5Matrix('Selection.h5', 'ID', start=nump/2, end=nump)
+x_test = HDF5Matrix('Selection.h5', 'Data', start=nump, end=2*nump)
+y_test = HDF5Matrix('Selection.h5', 'ID', start=nump, end=2*nump)
 
 
 # Define model
@@ -44,3 +44,32 @@ score = model.evaluate(x_test, y_test, batch_size=128)
 
 model.save('model_selec.h5')
 model.summary()
+'''
+
+xr_train = HDF5Matrix('Tracks.h5', 'Data', start=0, end=nump/2)
+yr_train = HDF5Matrix('Tracks.h5', 'Parameters', start=0, end=nump/2)
+
+xr_test = HDF5Matrix('Tracks.h5', 'Data', start=nump/2, end=nump)
+yr_test = HDF5Matrix('Tracks.h5', 'Parameters', start=nump/2, end=nump)
+
+
+
+model2 = Sequential()
+model2.add(Dense(784, activation='tanh', W_regularizer=l2(1e-5), input_dim=n*m))
+model2.add(Dense(784, activation='tanh', W_regularizer=l2(1e-5), input_dim=n*m))
+model2.add(Dense(784, activation='relu', W_regularizer=l2(1e-5), input_dim=n*m))
+model2.add(Dense(784, activation='relu', W_regularizer=l2(1e-5), input_dim=n*m))
+model2.add(Dense(784, activation='tanh', W_regularizer=l2(1e-5), input_dim=n*m))
+model2.add(Dense(2, activation='linear'))
+
+
+model2.compile(loss='mean_squared_error', optimizer=SGD(lr=0.01))
+
+model2.fit(xr_train, yr_train,
+          epochs=100,
+          batch_size=128, shuffle='batch')
+score = model.evaluate(xr_test, yr_test, batch_size=128)
+
+model2.save('model_rec.h5')
+model2.summary()
+

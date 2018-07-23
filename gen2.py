@@ -18,7 +18,7 @@ idset=h5f1.create_dataset("ID", (2*nump, 1), 'i')
 
 
 dset2=h5f2.create_dataset("Data", (nump,m*n))
-pset=h5f1.create_dataset("Parameters", (nump, 2))
+pset=h5f2.create_dataset("Parameters", (nump, 2))
 
 
 
