@@ -23,8 +23,6 @@ for i in range(20):
 	plt.show()
 '''
 
-print paramp[0]
-print paramr[0]
 ap=np.zeros((50000))
 ar=np.zeros((50000))
 bp=np.zeros((50000))
@@ -36,11 +34,20 @@ for i in range(50000):
 	br[i]=paramr[i][1]
 
 
+x=ap-ar
 
+plt.hist(x, 99)
+plt.show()
 
+x=bp-br
+
+plt.hist(x, 99)
+plt.show()
+
+'''
 plt.plot(ar, ap, 'ro')
 plt.show()
 
 plt.plot(br, bp, 'ro')
 plt.show()
-	
+'''	

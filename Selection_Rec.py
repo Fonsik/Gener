@@ -93,6 +93,6 @@ model2.fit(xr_train, yr_train,
           batch_size=128,shuffle='batch')
 score = model2.evaluate(xr_test, yr_test, batch_size=128)
 
-model2.save('model_rec.h5')
+model2.save('model_test.h5')
 model2.summary()
 
