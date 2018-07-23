@@ -5,6 +5,7 @@ from keras.regularizers import l2
 from keras.optimizers import SGD
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.callbacks import ModelCheckpoint
 import h5py
 import numpy as np
 
@@ -65,10 +66,12 @@ model2.add(Dense(2, activation='linear'))
 
 model2.compile(loss='mean_squared_error', optimizer=SGD(lr=0.01))
 
+keras.callbacks.ModelCheckpoint('./chp2.h5', monitor='val_loss', verbose=0, save_best_only=True, save_weights_only=False, mode='auto', period=1)
+
 model2.fit(xr_train, yr_train,
           epochs=100,
           batch_size=128, shuffle='batch')
-score = model.evaluate(xr_test, yr_test, batch_size=128)
+score = model2.evaluate(xr_test, yr_test, batch_size=128)
 
 model2.save('model_rec.h5')
 model2.summary()
