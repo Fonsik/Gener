@@ -17,7 +17,7 @@ paramr=h5f["Real parameters"][:]
 h5f = h5py.File('data.h5', 'r')
 Vector = h5f["Tracks"][:]
 param=h5f["Parameters"][:]
-'''
+
 for i in range(20):
 	plt.imshow(Vector[i], interpolation='nearest')
 	plt.show()
@@ -44,10 +44,10 @@ x=bp-br
 plt.hist(x, 99)
 plt.show()
 
-'''
+
 plt.plot(ar, ap, 'ro')
 plt.show()
 
 plt.plot(br, bp, 'ro')
 plt.show()
-'''	
+'''

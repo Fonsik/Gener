@@ -22,12 +22,12 @@ Vector = h5f["Tracks"][:]
 param=h5f["Parameters"][:]
 
 
-model = load_model('model_rec.h5')
+model = load_model('cnn.h5')
 model.compile(loss='mean_squared_error', optimizer=SGD(lr=0.01))
-'''
+
 data=np.array(data)
-data=data.reshape(50000,28,28,1)
-'''
+data=data.reshape(50000,1,28,28)
+
 sc=model.predict(data)
 
 for i in range(nump):

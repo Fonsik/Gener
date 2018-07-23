@@ -4,7 +4,7 @@ from keras.utils.io_utils import HDF5Matrix
 from keras.regularizers import l2
 from keras.optimizers import SGD
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Flatten
+from keras.layers import Dense, Conv2D, Flatten, Dropout, Reshape
 from keras.callbacks import ModelCheckpoint
 import h5py
 import numpy as np
@@ -54,8 +54,8 @@ yr_train = HDF5Matrix('Tracks.h5', 'Parameters', start=0, end=nump/2)
 xr_test = HDF5Matrix('Tracks.h5', 'Data', start=nump/2, end=nump)
 yr_test = HDF5Matrix('Tracks.h5', 'Parameters', start=nump/2, end=nump)
 
-'''
 
+'''
 xr_train=np.array(xr_train)
 print xr_train.shape
 #yr_train=np.array(yr_train)
@@ -67,8 +67,6 @@ print xr_test.shape
 '''
 
 model2 = Sequential()
-#model2.add(Conv2D(32,(3,3), input_shape=(n,m,1)))
-#model2.add(P)
 model2.add(Flatten(input_shape=(n,m)))
 model2.add(Dense(784, activation='tanh', W_regularizer=l2(1e-5), input_dim=n*m))
 model2.add(Dense(784, activation='tanh', W_regularizer=l2(1e-5), input_dim=n*m))
@@ -87,11 +85,10 @@ xr_train=xr_train.reshape(nump/2,n,m,1)
 xr_test=xr_test.reshape(nump/2,n,m,1)
 #yr_test=yr_test.reshape(nump/2,2,1)
 '''
-
 model2.fit(xr_train, yr_train,
           epochs=100,
-          batch_size=128,shuffle='batch')
-score = model2.evaluate(xr_test, yr_test, batch_size=128)
+          batch_size=256,shuffle='batch')
+score = model2.evaluate(xr_test, yr_test, batch_size=256)
 
 model2.save('model_test.h5')
 model2.summary()

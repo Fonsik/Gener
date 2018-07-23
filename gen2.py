@@ -111,7 +111,7 @@ pset=h5f.create_dataset("Parameters", (nump, 2))
 i=0
 while (i<nump):
 	a=random.uniform(-5,5)
-	b=random.uniform(-30,30)
+	b=random.uniform(-20,20)
 	par=np.array([a,b])
 	i+=1
 	ctr=0
