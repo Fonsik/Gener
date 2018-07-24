@@ -71,7 +71,7 @@ pset=h5f.create_dataset("Parameters", (nump, 2))
 
 i=0
 while (i<nump):
-	a=random.uniform(-5,5)
+	a=random.uniform(-10,10)
 	b=random.uniform(-30,30)
 	par=np.array([a,b])
 	i+=1
@@ -87,7 +87,7 @@ while (i<nump):
 		if (y<m and y>=0 and eta<0.8):
 			Vector[y][x]=1
 			ctr+=1
-	if ctr>8:
+	if ctr>6:
 		for j in range (n):
 			for k in range(m):
 				p=random.uniform(0,1)
@@ -110,8 +110,8 @@ pset=h5f.create_dataset("Parameters", (nump, 2))
 
 i=0
 while (i<nump):
-	a=random.uniform(-5,5)
-	b=random.uniform(-20,20)
+	a=random.uniform(-10,10)
+	b=random.uniform(-30,30)
 	par=np.array([a,b])
 	i+=1
 	ctr=0
@@ -126,7 +126,7 @@ while (i<nump):
 		if (y<m and y>=0 and eta<0.8):
 			Vector[y][x]=1
 			ctr+=1
-	if ctr>8:
+	if ctr>6:
 		for j in range (n):
 			for k in range(m):
 				p=random.uniform(0,1)

@@ -10,29 +10,17 @@ nump=50000
 n=28
 m=28
 
-data = HDF5Matrix('data.h5', 'Tracks', start=0, end=nump)
-
-h5f1 = h5py.File('output.h5', 'w')
-dset=h5f1.create_dataset("Data", (nump,m,n))
-psetpr=h5f1.create_dataset("Predicted parameters", (nump, 2))
-psetrl=h5f1.create_dataset("Real parameters", (nump, 2))
-
-h5f = h5py.File('data.h5', 'r')
-Vector = h5f["Tracks"][:]
-param=h5f["Parameters"][:]
-
+data=np.load('data.npy')
 
 model = load_model('cnn.h5')
 model.compile(loss='mean_squared_error', optimizer=SGD(lr=0.01))
 
-data=np.array(data)
-data=data.reshape(50000,1,28,28)
+model2 = load_model('model_test.h5')
+model2.compile(loss='mean_squared_error', optimizer=SGD(lr=0.01))
 
-sc=model.predict(data)
 
-for i in range(nump):
-	dset[i]=data[i]
-	psetpr[i]=sc[i]
-	psetrl[i]=param[i]
+sc1=model.predict(data)
+sc2=model.predict(data)
 
-h5f1.close()
+np.save("cnn_out", sc1)
+np.save("dense_out", sc2)
